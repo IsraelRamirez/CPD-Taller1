@@ -32,43 +32,48 @@ string infoAlumno(int rut);
 int main(int argc, char** argv){
     
     srand((unsigned int)time(0));
-    
-    // Crea / abre el archivo matricula.csv
-    ofstream archivoSalida("matricula.csv");
-    
-    // La información de todas las matriculas se guardará aqui.
-    string TotalMatricula = "";
-    
-    // Recorre los ruts
-#pragma omp parallel
-    {
-#pragma omp for
-    for(int rut = 14916641 ; rut <= 14916661 ; rut++){//ruts entre 14916641 - 19932391
+    if(argc >1){
+        // Crea / abre el archivo matricula.csv
+        ofstream archivoSalida("matricula.csv");
         
-        string totalInfo = to_string(rut)+";";
+        // La información de todas las matriculas se guardará aqui.
+        string TotalMatricula = "";
+        
+        // Recorre los ruts
+    #pragma omp parallel
+        {
+    #pragma omp for
+        for(int rut = 14916641 ; rut <= 14916661 ; rut++){//ruts entre 14916641 - 19932391
+            
+            string totalInfo = to_string(rut)+";";
 
-        //Ingresa el NEM del alumno, como numero aleatorio
-        totalInfo += to_string(numeroAleatorio(475,750)) +";";
-        //Ingresa el Ranking del alumno, como numero aleatorio
-        totalInfo += to_string(numeroAleatorio(475,750)) +";";
-        //Ingresa el puntaje en Matematicas del alumno, como numero aleatorio
-        totalInfo += to_string(numeroAleatorio(475,750)) +";";
-        //Ingresa el puntaje en Lenguaje del alumno, como numero aleatorio
-        totalInfo += to_string(numeroAleatorio(475,750)) +";";
-        //Ingresa el puntaje en Ciencias del alumno, como numero aleatorio
-        totalInfo += to_string(numeroAleatorio(475,750)) +";";
-        //Ingresa el puntaje en Historia del alumno, como numero aleatorio
-        totalInfo += to_string(numeroAleatorio(475,750)) +"\n";
-#pragma omp critical
-        archivoSalida<<totalInfo;
+            //Ingresa el NEM del alumno, como numero aleatorio
+            totalInfo += to_string(numeroAleatorio(475,750)) +";";
+            //Ingresa el Ranking del alumno, como numero aleatorio
+            totalInfo += to_string(numeroAleatorio(475,750)) +";";
+            //Ingresa el puntaje en Matematicas del alumno, como numero aleatorio
+            totalInfo += to_string(numeroAleatorio(475,750)) +";";
+            //Ingresa el puntaje en Lenguaje del alumno, como numero aleatorio
+            totalInfo += to_string(numeroAleatorio(475,750)) +";";
+            //Ingresa el puntaje en Ciencias del alumno, como numero aleatorio
+            totalInfo += to_string(numeroAleatorio(475,750)) +";";
+            //Ingresa el puntaje en Historia del alumno, como numero aleatorio
+            totalInfo += to_string(numeroAleatorio(475,750)) +"\n";
+    #pragma omp critical
+            archivoSalida<<totalInfo;
+        }
+        }
+        
+        // Cierra el archivo usado
+        archivoSalida.close();
+        
+        participante();
+        return 0;
     }
+    else{
+        cout<< "No se han ingresado ningun parametro..."<<endl;
+        return 1;
     }
-    
-    // Cierra el archivo usado
-    archivoSalida.close();
-    
-    participante();
-    return EXIT_SUCCESS;
 }
 
 void participante(){

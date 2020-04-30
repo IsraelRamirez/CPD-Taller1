@@ -29,27 +29,34 @@ string infoAlumno(int rut);
  * @return Retorna el código de error.
  */
 int main(int argc, char** argv){
-    
+    // Se asigna una semilla al generador de números aleatorios
     srand((unsigned int)time(0));
-    
-    // Crea / abre el archivo matricula.csv
-    ofstream archivoSalida("matricula.csv");
-    
-    // La información de todas las matriculas se guardará aqui.
-    string TotalMatricula = "";
-    
-    // Recorre los ruts
-    for(int rut = 14916641 ; rut <= 19932391 ; rut++){//ruts entre 14916641 - 19932391
-        TotalMatricula += infoAlumno(rut);
+
+    if(argc >1){
+        // Crea / abre el archivo matricula.csv
+        ofstream archivoSalida("matricula.csv");
+        
+        // La información de todas las matriculas se guardará aqui.
+        string TotalMatricula = "";
+        
+        // Recorre los ruts
+        for(int rut = stoi(argv[1]); rut <= stoi(argv[2]) ; rut++){//ruts entre 14916641 - 19932391
+            TotalMatricula += infoAlumno(rut);
+        }
+        //Ingresa la información al archivo
+        archivoSalida << TotalMatricula;
+        
+        // Cierra el archivo usado
+        archivoSalida.close();
+
+        participante();
+        return 0;
     }
-    //Ingresa la información al archivo
-    archivoSalida << TotalMatricula;
+    else{
+        cout<< "No se han ingresado ningun parametro..."<<endl;
+        return 1;
+    }
     
-    // Cierra el archivo usado
-    archivoSalida.close();
-    
-    participante();
-    return EXIT_SUCCESS;
 }
 
 void participante(){

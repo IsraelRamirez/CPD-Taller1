@@ -3,6 +3,7 @@
 #include <fstream>
 #include <ctime>
 #include <string>
+#include <iomanip>
 #include <math.h>
 using namespace std;
 
@@ -14,41 +15,41 @@ void participante();
  */
 string PromedioAlumno(string linea);
 /**
- * Redondea el número con decimal ingresado segun sea el caso
- * @param numero Se ingresa el numero con decimal a redondear
- * @return Devuelve el numero redondeado si el decimal es mayor que 4 y no redondea si es menor o igual que 4
- */
-int redondear(float numero);
-/**
  * Taller computacional donde se toman los ruts de cada matricula y su saca el promedio de los puntajes, las matriculas se reciben en el archivo matricula.csv y los promedios en el archivo promedio.csv
  * @param argc Cantidad de argumentos ingresados por el usuario
  * @param argv Argumentos ingresados por el usuario
  * @return Retorna el código de error.
  */
 int main(int argc, char** argv){
-    
-    // abre el archivo matricula.csv
-    ifstream archivoEntrada("matricula.csv");
-    // crea el archivo promedios.csv
-    ofstream archivoSalida("promedio.csv");
-    // Se crea la variable linea, que guardará la información del archivo correspondiente a una linea
-    string linea;
-    // Se recorre el archivo hasta el final de archivo (eof)
-    while(!archivoEntrada.eof()){
-        //Se guarda una línea del archivo en la variable linea
-        getline(archivoEntrada, linea);
-        //Se verifica que la linea leida no sea el final del archivo
-        if(linea!="\0"){
-            // Se ejecuta el promedio del alumno y se guarda en el archivo "promedio.csv"
-            archivoSalida << PromedioAlumno(linea)<<endl;
+    //Comprueba que se ha entregado la ruta del archivo con los datosde los alumnos.
+    if(argc > 1){
+        // abre el archivo matricula.csv
+        ifstream archivoEntrada(argv[1]);
+        // crea el archivo promedios.csv
+        ofstream archivoSalida("promedio.csv");
+        // Se crea la variable linea, que guardará la información del archivo correspondiente a una linea
+        string linea;
+        // Se recorre el archivo hasta el final de archivo (eof)
+        while(!archivoEntrada.eof()){
+            //Se guarda una línea del archivo en la variable linea
+            getline(archivoEntrada, linea);
+            //Se verifica que la linea leida no sea el final del archivo
+            if(linea!="\0"){
+                // Se ejecuta el promedio del alumno y se guarda en el archivo "promedio.csv"
+                archivoSalida << PromedioAlumno(linea)<<endl;
+            }
         }
+        // Cierra los archivos usados
+        archivoEntrada.close();
+        archivoSalida.close();
+
+        participante();
+        return EXIT_SUCCESS;
     }
-    // Cierra los archivos usados
-    archivoEntrada.close();
-    archivoSalida.close();
-    
-    participante();
-    return EXIT_SUCCESS;
+    else{
+        cout<<"ERROR: Se debe ingresar la ruta del archivo con los datos de los alumnos..."<<endl;
+        return 1;
+    }
 }
 
 void participante(){
@@ -67,7 +68,7 @@ string PromedioAlumno(string linea){
     int arregloSplit[7],posicionArreglo=0,promedio;
     float promedioSuma=0;
     string InfoTemporal="";
-
+    
     // Se recorre la información guarda en linea
     for(int i=0;linea[i]!='\n'&& linea[i]!='\0';i++){
         // Guarda la informacion en InfoTemporal hasta que lea un ";"
@@ -88,21 +89,40 @@ string PromedioAlumno(string linea){
         // Si es el último puntaje se saca el promedio
         if(i == 6){
             // Se redonde al promedio
-            promedio = redondear(promedioSuma/6);
+            promedio = promedioSuma/6;
         }
     }
+    /** Se crean las variables dosDecimales y dosDecimalesSetring
+     * dosDecimales es una variable que guardara los dos primeros decimales de un numero
+     * dosDecimalesString es una variable que guardara los dos primeros decimales en string
+    */
 
-    return to_string(arregloSplit[0])+";"+to_string(promedio);
-}
-
-int redondear(float numero){
-    //Verifica si el numero es menor o igual que 4,4 redondea para abajo
-    if(numero - floor(numero) < ceil(numero) - numero ){
-        return floor(numero);
+    // Se multiplica por 1000 para guardar los primeros 3 decimales en caso de tener que redondear
+    int dosDecimales = (promedioSuma/6)*1000;
+    string dosDecimalesString;
+    // Se guardan solamente los 3 decimales
+    dosDecimales = dosDecimales%1000;
+    // Si el tercer decimal es mayor que 4 se suma 1 a los primeros 2 decimales
+    if(dosDecimales%10 >4){
+        dosDecimales = (dosDecimales/10)+1;
+        // Si los dos decimales al sumarlos da mayor que 99 se suma 1 en el promedio
+        if(dosDecimales>99){
+            dosDecimales=0;
+            promedio ++;
+        }   
     }
-    //Verifica si el numero es mayor o igual que 4,5 redondea para abajo
+    else
+    {
+        dosDecimales = (dosDecimales/10);
+    }
+     
+    // En caso de que los dos decimales sean 0 se debe agregar un segundo 00 para normalizar los datos
+    if(to_string(dosDecimales)=="0"){
+        dosDecimalesString = "00";
+    }
     else{
-        return ceil(numero);
+        dosDecimalesString = to_string(dosDecimales);
     }
-}
 
+    return to_string(arregloSplit[0])+";"+to_string(promedio)+"."+dosDecimalesString;
+}
