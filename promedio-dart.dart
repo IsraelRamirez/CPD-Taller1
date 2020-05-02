@@ -5,6 +5,8 @@ import 'dart:io';
 participante(){
   print("=== Tarea ===");
   print("Israel Ramirez Cardoso. ");
+  print("Humberto Román Matamoros. ");
+  print("Victor Araya Romero. ");
 }
 /**
  * Función que calcula el promedio de puntajes PSU de un alumno ingresado como Rut;NEM;Ranking;PSU-Lenguaje;PSU-Matemática;PSU-Historia; PSU-Ciencias
