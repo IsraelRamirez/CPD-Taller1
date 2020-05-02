@@ -43,7 +43,7 @@ int main(int argc, char** argv){
     #pragma omp parallel
         {
     #pragma omp for
-        for(int rut = 14916641 ; rut <= 14916661 ; rut++){//ruts entre 14916641 - 19932391
+        for(int rut = stoi(argv[1]) ; rut <= stoi(argv[2]) ; rut++){//ruts entre 14916641 - 19932391
             
             string totalInfo = to_string(rut)+";";
 
