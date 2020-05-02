@@ -75,6 +75,8 @@ int main(int argc, char** argv){
 void participante(){
     cout<< endl << "=== Tarea ===" <<endl;
     cout<< endl << "Israel Ramirez Cardoso. "<<endl;
+    cout<< endl << "Humberto Román Matamoros." <<endl;
+    cout<< endl << "Victor Araya Romero. "<<endl;
 }
 
 string PromedioAlumno(string linea){
