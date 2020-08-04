@@ -41,7 +41,7 @@ int main(int argc, char** argv){
         #pragma omp for
         for(int i=0;i<=largoArchivo;i++){
             //Se abre el archivo
-            ifstream archivoEntrada("matricula.csv");
+            ifstream archivoEntrada(argv[1]);
             //Se coloca el puntero en la linea especificada
             archivoEntrada.seekg(i*33);
             string linea;
